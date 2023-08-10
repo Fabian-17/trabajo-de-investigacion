@@ -4,7 +4,7 @@ const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
-
+const cloudinary = require('cloudinary');
 
 require('dotenv').config();
 
