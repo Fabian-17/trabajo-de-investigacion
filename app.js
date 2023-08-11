@@ -8,6 +8,13 @@ const cloudinary = require('cloudinary');
 
 require('dotenv').config();
 
+const { sequelize } = require('./db');
+
+sequelize.authenticate()
+    .then(() => console.log('Conexión a base de datos exitosa'))
+    .catch((error) => console.log('Error al conectar a base de datos', error));
+
+
 const app = express();
 require('ejs');
 
@@ -26,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // Routes
-// app.use(require(''));
+app.use(require('./routes/routes'));
 
 // error 404
 app.use((req, res, next) => {
