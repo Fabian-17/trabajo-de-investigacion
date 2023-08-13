@@ -5,9 +5,11 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
 const cloudinary = require('cloudinary');
+const fileUpload = require('express-fileupload');
 
 require('dotenv').config();
 
+// Se ejecuta una instancia de conexión a la base de datos
 const { sequelize } = require('./db');
 
 sequelize.authenticate()
@@ -31,6 +33,9 @@ app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+//configuración de File Upload
+app.use(fileUpload());
 
 // Routes
 app.use(require('./routes/routes'));
