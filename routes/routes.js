@@ -20,7 +20,7 @@ router.get('/api/', obtener);
 router.get('/api/', buscar);
  
 // Crear una imagen
-router.post('/api/', cargar);
+router.post('/api/guardar/', cargar);
  
 // Actualizar una imagen
 router.put('/api/:id', actualizar);
