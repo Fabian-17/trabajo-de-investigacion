@@ -9,7 +9,6 @@ id: {
 },
 public_id: {
     type: DataTypes.STRING,
-    autoIncrement: true
 },
 url: {
     type: DataTypes.STRING,

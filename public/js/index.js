@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const imageTable = document.getElementById("image-table");
-    const editModal = new bootstrap.Modal(document.getElementById("editModal"));
+    const editModal = document.getElementById("editModal");
     const editForm = document.getElementById("edit-form");
     const editNombreInput = document.getElementById("editNombre");
   
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // aqui se agregan los eventos de clic a los botones de editar y eliminar
       imageTable.addEventListener("click", handleButtonClick);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   });
   

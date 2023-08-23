@@ -1,6 +1,5 @@
 const ctrl = {};
 const path = require("path");
-const { cloudinary } = require("../utils/coudinary");
 const Imagen = require('../models/model')
 
 ctrl.renderindex = (req, res) => {
@@ -47,21 +46,43 @@ ctrl.rendercargar = (req, res) => {
   
 
    ctrl.cargar = async (req, res) => {
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send('No se encontraron imágenes para subir.');
-    }
-  
-    const archivo = req.files.archivo;
-    const ruta = path.join(__dirname, 'img', archivo.name);
-  
-    archivo.mv(ruta, (err) => {
-      if (err) {
-        return res.status(500).send(err);
+    try {
+      if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).json({ error: "No se encontraron imágenes para subir." });
       }
-      // Renderiza la vista de carga de imágenes con un mensaje de éxito
-      res.render('cargar', { mensaje: 'Imagen subida exitosamente.' });
-    });
+  
+      const archivo = req.files.archivo;
+      
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
+      const nombreArchivo = `${uniqueSuffix}-${archivo.name}`; // Cambia el nombre del archivo si es necesario
+  
+      const rutaGuardado = path.join(__dirname, "../img", nombreArchivo);
+  
+      archivo.mv(rutaGuardado, async (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: "Error al subir la imagen." });
+        }
+  
+        // Guardar la información de la imagen en la base de datos
+        try {
+          const nuevaImagen = await Imagen.create({
+            nombre_original: archivo.name,
+            nombre_guardado: nombreArchivo,
+          });
+  
+          return res.status(201).json({ message: "Imagen subida exitosamente.", imagen: nuevaImagen });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ error: "Error del servidor." });
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Error del servidor." });
+    }
   };
+  
 
 // Controlador para actualizar una imagen por su ID
 ctrl.actualizar = async (req, res) => {

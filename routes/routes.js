@@ -14,18 +14,18 @@ router.get('/', renderindex);
 router.get('/guardar', rendercargar);
 
 // Obtener todas las imagenes
-router.get('/api/', obtener);
+router.get('/', obtener);
 
 //Obtener una imagen
-router.get('/api/', buscar);
+router.get('/', buscar);
  
 // Crear una imagen
-router.post('/api/guardar/', cargar);
+router.post('/guardar/', cargar);
  
 // Actualizar una imagen
-router.put('/api/:id', actualizar);
+router.put('/:id', actualizar);
  
 // Eliminar una imagen
-router.delete('/api/:id', destroy);
+router.delete('/:id', destroy);
 
 module.exports = router;
