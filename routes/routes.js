@@ -28,4 +28,12 @@ router.put('/:id', actualizar);
 // Eliminar una imagen
 router.delete('/:id', destroy);
 
+
+router.post('/upload', (req, res) => {
+    res.render('upload')
+})
+router.post('/success', (req, res) => {
+    res.render('success')
+})
+
 module.exports = router;

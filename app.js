@@ -37,6 +37,43 @@ app.use(express.urlencoded({extended: true}));
 //configuración de File Upload
 app.use(fileUpload());
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+
+  const uploadDir = path.join(__dirname, 'uploads');
+
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+  });
+  
+  const upload = multer({ storage });   
+
+  // Ruta para manejar la subida de archivos
+app.post('/upload', upload.single('image'), (req, res) => {
+    const imagePath = req.file.path;
+  
+    // Subir la imagen a Cloudinary
+    cloudinary.uploader.upload(imagePath, (error, result) => {
+      if (error) {
+        console.error('Error al subir la imagen a Cloudinary:', error);
+        res.redirect('/');
+      } else {
+        // Mostrar el enlace a la imagen subida
+        const imageUrl = result.secure_url;
+        res.render('success', { imageUrl });
+      }
+    });
+  });
+
+
 // Routes
 app.use(require('./routes/routes'));
 
